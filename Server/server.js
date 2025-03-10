@@ -24,22 +24,30 @@
 // });
 
 
-const express = require('express');
-const connectDB = require('./config/db');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./config/db");
+require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(express.json());
+app.use(cors()); // Enable CORS
+app.use(express.json()); // Parse JSON data
+app.use(express.urlencoded({ extended: true })); // Parse form data
 
 // Connect to MongoDB
 connectDB();
 
 // Routes
-app.use('/products', require('./routes/itemRoutes'));
+app.use("/products", require("./routes/itemRoutes"));
 
+app.get("/", (req, res) => {
+  res.send("🚀 API is running...");
+});
+
+// Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
 
